@@ -1,4 +1,4 @@
-import { User } from '#src/models/User.model.js'
+import { User } from '#src/models/user.model.js'
 import { TypeUser } from '#src/types/User.js'
 import { comparePasswords, hashPassword } from '#src/utils/bcrypt.js'
 import { Request, Response } from 'express'

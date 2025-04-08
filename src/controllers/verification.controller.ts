@@ -1,4 +1,4 @@
-import { User } from "#src/models/User.model.js";
+import { User } from "#src/models/user.model.js";
 import { transport } from "#src/services/transport.service.js";
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
