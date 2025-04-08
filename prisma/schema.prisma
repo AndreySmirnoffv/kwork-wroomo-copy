@@ -21,3 +21,12 @@ model Users{
   token String? @unique
   is_email_verified Boolean
 }
+
+model Payments{
+  id Int @id @default(autoincrement())
+  paymentId String @unique
+  email String @unique
+  value BigInt
+  status String
+
+}
