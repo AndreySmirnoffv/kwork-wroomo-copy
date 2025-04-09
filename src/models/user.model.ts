@@ -3,7 +3,7 @@ import { prisma } from "#src/services/prisma.service.js";
 
 export class User { 
     async findUser(email: string){
-        return await prisma.users.findFirst({
+        return await prisma.user.findFirst({
             where: { email }
         })
     }
@@ -11,7 +11,7 @@ export class User {
     async createUser(data: TypeUser){
         const { email, password, token} = data
 
-        return await prisma.users.create({
+        return await prisma.user.create({
             data: {
                 email,
                 password,
@@ -22,14 +22,14 @@ export class User {
     }
 
     async findUserByToken(token: string){
-        return await prisma.users.findFirst({
+        return await prisma.user.findFirst({
             where: { token }
         })
     }
 
     async emailStatus(data: any) {
         const { email, is_email_verified, token } = data
-        return await prisma.users.update({
+        return await prisma.user.update({
             where: { email },
             data: { token, is_email_verified: is_email_verified },
         });

@@ -5,7 +5,7 @@ export class PaymentModel{
     async createPayment(data: any){
         const { paymentId, value, email, status } = data
 
-        return prisma.payments.create({
+        return prisma.payment.create({
             data: {
                 paymentId,
                 email,
@@ -16,7 +16,7 @@ export class PaymentModel{
     }
 
     async updatePaymentStatus(paymentId: string, status: string){
-        return prisma.payments.update({
+        return prisma.payment.update({
             where: { paymentId },
             data: {
                 status
