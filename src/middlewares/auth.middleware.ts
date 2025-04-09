@@ -11,12 +11,12 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: "Authentication error: Missing or malformed token" });
+        return res.status(401).json({ message: "Ошибка авторизации: Токен не был передан либо недействителен" });
     }
     const token = authHeader.split(" ")[1].replace(/^"|"$/g, "");
 
     if (!token || typeof token !== "string") {
-        return res.status(403).json({ message: "Invalid token format" });
+        return res.status(403).json({ message: "Неверный формат" });
     }
 
     try {
@@ -27,9 +27,9 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     } catch (error: any) {
         if (error.name === "TokenExpiredError") {
             res.redirect(String(process.env.FRONTEND_API + "/auth"))
-            return res.status(403).json({ message: "Token expired" });
+            return res.status(403).json({ message: "Токен истек" });
         }
         console.log(error)
-        return res.status(403).json({ message: "Invalid token" });
+        return res.status(403).json({ message: "Неправельный токен" });
     }
 }

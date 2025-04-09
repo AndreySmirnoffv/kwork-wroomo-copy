@@ -57,7 +57,7 @@ export async function login(req: Request, res: Response): Promise<Response | any
     }
 
     if (!userExists.is_email_verified) {
-        return res.status(401).json({ message: "Подтвердите почту" });
+        return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Подтвердите почту" });
     }
 
     const isPasswordValid = await comparePasswords(password, userExists.password);
