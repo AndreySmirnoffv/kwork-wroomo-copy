@@ -15,12 +15,13 @@ datasource db {
 
 
 model User{
-  id BigInt @id @default(autoincrement())
+  uuid String @id @default(uuid())
   email String @unique
   password String @unique
   token String? @unique
   is_email_verified Boolean
-  role String @default("user")
+  role String? @default("user")
+  type String @default("client")
 }
 
 model Payment{

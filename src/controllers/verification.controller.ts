@@ -3,6 +3,7 @@ import { transport } from "#src/services/transport.service.js";
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { StatusCodes } from 'http-status-codes';
+import { TypeEmailStatus } from "#src/types/EmailStatus.js";
 
 const user = new User();
 
@@ -17,7 +18,7 @@ export async function sendEmail(to: string, token: string) {
 }
 
 export async function verifyEmail(req: Request, res: Response): Promise<Response | any> {
-    const { token } = req.query;
+    const token = req.query.token as string
 
     if (!token) {
         return res.status(400).json({ message: "Токен не найден" });
@@ -33,10 +34,10 @@ export async function verifyEmail(req: Request, res: Response): Promise<Response
             return res.status(StatusCodes.NOT_FOUND).json({ message: "Пользователь не найден" });
         }
 
-        const data = {
+        const data: TypeEmailStatus = {
             email,
+            token,
             is_email_verified: true,
-            token
         }
         
         await user.emailStatus(data);

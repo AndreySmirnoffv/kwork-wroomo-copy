@@ -31,7 +31,7 @@ export async function register(req: Request, res: Response): Promise<Response | 
         email,
         password: hashedPassword,
         emailVerified: false,
-        token
+        token,
     };
     
     const createdUser = await user.createUser(data);
@@ -67,7 +67,7 @@ export async function login(req: Request, res: Response): Promise<Response | any
     }
 
     const token = jwt.sign(
-        { email: userExists.email, userId: userExists.id },
+        { email: userExists.email, userId: userExists.uuid },
         process.env.JWT_SECRET as string,
         { expiresIn: '1h' }
     );
