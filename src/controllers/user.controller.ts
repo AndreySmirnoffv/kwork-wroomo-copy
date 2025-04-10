@@ -30,7 +30,16 @@ export async function replaceUser(req: Request, res: Response): Promise<Response
         return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
     }
 
-    const updatedUser = await userModel.updateUser(uuid, userData);
+    if (userData.avatar) {
+        try {
+            const avatarUrl = await userModel.updateUser(uuid, userData.avatar);
+            userData.avatar_url = avatarUrl;
+        } catch (error) {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Error uploading avatar" });
+        }
+    }
+
+    const updatedUser = await new User().updateUser(uuid, userData);
 
     return res.json({ message: "User replaced successfully", user: updatedUser });
 }
@@ -43,13 +52,22 @@ export async function updateUser(req: Request, res: Response): Promise<Response 
         return res.status(StatusCodes.BAD_REQUEST).json({ message: "No fields to update" });
     }
 
-    const user = await userModel.findUserByUuid(uuid);
+    const user = await new User().findUserByUuid(uuid);
 
     if (!user) {
         return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
     }
 
-    const updatedUser = await userModel.updateUser(uuid, updates);
+    if (req.body.avatar) {
+        try {
+            const avatarUrl = await userModel.updateUser(uuid, req.body.avatar);
+            updates.avatar_url = avatarUrl;
+        } catch (error) {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Error uploading avatar" });
+        }
+    }
+
+    const updatedUser = await new User().updateUser(uuid, updates);
 
     return res.json({ message: "User updated successfully", user: updatedUser });
 }

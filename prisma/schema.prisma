@@ -22,6 +22,7 @@ model User{
   is_email_verified Boolean
   role String? @default("user")
   type String @default("client")
+  avatarUrl String?
 }
 
 model Payment{

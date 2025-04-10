@@ -3,4 +3,5 @@ export type TypeUser = {
     password: string
     emailVerified: boolean
     token?: string
+    avatarUrl?: string | any
 }
