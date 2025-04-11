@@ -33,7 +33,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
                 const decodedRefresh = jwt.verify(refreshToken, process.env.REFRESH_SECRET as string) as any;
 
                 const existingUser = await user.findUser(decodedRefresh.email);
-                if (!existingUser || existingUser.token !== refreshToken) {
+                if (!existingUser || existingUser.accessToken !== refreshToken) {
                     return res.status(StatusCodes.FORBIDDEN).json({ message: "Refresh токен недействителен" });
                 }
 

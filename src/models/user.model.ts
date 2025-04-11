@@ -21,16 +21,16 @@ export class User {
         });
     }
 
-    async findUserByToken(token: string) {
-        return prisma.user.findFirst({ where: { token } });
+    async findUserByToken(accessToken: string) {
+        return prisma.user.findFirst({ where: { accessToken } });
     }
 
     async emailStatus(data: TypeEmailStatus) {
-        const { email, is_email_verified, token } = data;
+        const { email, is_email_verified, accessToken } = data;
 
         return prisma.user.update({
             where: { email },
-            data: { token, is_email_verified },
+            data: { accessToken, is_email_verified },
         });
     }
 

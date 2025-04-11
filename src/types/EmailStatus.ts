@@ -1,5 +1,5 @@
 export type TypeEmailStatus = {
     email: string
-    token: string
+    accessToken: string
     is_email_verified: boolean
 }
