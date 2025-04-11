@@ -21,6 +21,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
 
     try {
         const decoded = jwt.verify(accessToken, process.env.JWT_SECRET as string);
+
         (req as any).user = decoded;
         return next();
     } catch (error: any) {
@@ -33,6 +34,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
                 const decodedRefresh = jwt.verify(refreshToken, process.env.REFRESH_SECRET as string) as any;
 
                 const existingUser = await user.findUser(decodedRefresh.email);
+
                 if (!existingUser || existingUser.accessToken !== refreshToken) {
                     return res.status(StatusCodes.FORBIDDEN).json({ message: "Refresh token is invalid" });
                 }
@@ -45,6 +47,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
                 res.setHeader("x-access-token", newAccessToken);
 
                 (req as any).user = jwt.decode(newAccessToken);
+                
                 return next();
 
             } catch (refreshError) {

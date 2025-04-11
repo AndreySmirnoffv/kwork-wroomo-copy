@@ -31,6 +31,7 @@ export async function register(req: Request, res: Response) {
     };
 
     const createdUser = await user.createUser(data);
+
     const { password: _, refreshToken: __, ...userInfo } = createdUser;
 
     await sendEmail(email, accessToken);
@@ -62,7 +63,10 @@ export async function login(req: Request, res: Response) {
     }
 
     const isPasswordValid = await comparePasswords(password, userExists.password);
-    if (!isPasswordValid) return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Invalid password" });
+    
+    if (!isPasswordValid) {
+        return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Invalid password" });
+    }
 
     const tokenPayload = { email: userExists.email, userId: userExists.uuid };
     const accessToken = generateAccessToken(tokenPayload);
