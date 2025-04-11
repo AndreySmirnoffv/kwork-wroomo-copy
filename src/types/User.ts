@@ -2,6 +2,7 @@ export type TypeUser = {
     email: string
     password: string
     emailVerified: boolean
-    token?: string
+    accessToken?: string,
+    refreshToken?: string
     avatarUrl?: string | any
 }

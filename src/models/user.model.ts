@@ -8,14 +8,15 @@ export class User {
     }
 
     async createUser(data: TypeUser) {
-        const { email, password, token } = data;
+        const { email, password, accessToken, refreshToken } = data;
 
         return prisma.user.create({
             data: {
                 email,
                 password,
                 is_email_verified: false,
-                token,
+                accessToken,
+                refreshToken
             },
         });
     }

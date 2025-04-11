@@ -2,54 +2,55 @@ import { User } from '#src/models/user.model.js'
 import { TypeUser } from '#src/types/User.js'
 import { comparePasswords, hashPassword } from '#src/utils/bcrypt.js'
 import { Request, Response } from 'express'
-import { StatusCodes } from 'http-status-codes'
-import jwt from 'jsonwebtoken'
 import { sendEmail } from './verification.controller.js'
+import { generateAccessToken, generateRefreshToken } from '#src/utils/jwt.js';
+import dayjs from 'dayjs'
+import { StatusCodes } from 'http-status-codes'
 
 const user = new User()
 
-export async function register(req: Request, res: Response): Promise<Response | any>{
-    const { email, password } = req.body
-    
-    const userExists = await user.findUser(email)
+export async function register(req: Request, res: Response) {
+    const { email, password } = req.body;
 
-    if(userExists){
-        return res.status(StatusCodes.CONFLICT).json({message: "Пользователь существует"})
-    }
+    const userExists = await user.findUser(email);
+    
+    if (userExists) return res.status(StatusCodes.CONFLICT).json({ message: "Пользователь существует" });
 
     const hashedPassword = await hashPassword(password);
+    const tokenPayload = { email };
 
-    const token = jwt.sign(
-        { email },
-        process.env.JWT_SECRET as string,
-        { expiresIn: '1h' }
-    );
-
-    console.log(token)
+    const accessToken = generateAccessToken(tokenPayload);
+    const refreshToken = generateRefreshToken(tokenPayload);
 
     const data: TypeUser = {
         email,
         password: hashedPassword,
         emailVerified: false,
-        token,
+        accessToken,
+        refreshToken
     };
-    
-    const createdUser = await user.createUser(data);
-    
-    const { password: _password, ...userInfo } = createdUser; 
 
-    await sendEmail(email, token);
+    const createdUser = await user.createUser(data);
+    const { password: _, refreshToken: __, ...userInfo } = createdUser;
+
+    await sendEmail(email, accessToken);
+
+    res.cookie("refreshToken", refreshToken, {
+        secure: true,
+        httpOnly: true,
+        expires: dayjs().add(30, "days").toDate()
+    });
 
     return res.status(StatusCodes.CREATED).json({
         message: "Пользователь создан",
-        user: userInfo
+        user: userInfo,
     });
 }
 
 
-export async function login(req: Request, res: Response): Promise<Response | any> {
+export async function login(req: Request, res: Response) {
     const { email, password } = req.body;
-
+    
     const userExists = await user.findUser(email);
 
     if (!userExists) {
@@ -61,23 +62,24 @@ export async function login(req: Request, res: Response): Promise<Response | any
     }
 
     const isPasswordValid = await comparePasswords(password, userExists.password);
-    
-    if (!isPasswordValid) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Неверный пароль" });
-    }
+    if (!isPasswordValid) return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Неверный пароль" });
 
-    const token = jwt.sign(
-        { email: userExists.email, userId: userExists.uuid },
-        process.env.JWT_SECRET as string,
-        { expiresIn: '1h' }
-    );
+    const tokenPayload = { email: userExists.email, userId: userExists.uuid };
+    const accessToken = generateAccessToken(tokenPayload);
+    const refreshToken = generateRefreshToken(tokenPayload);
 
-    const { password: _password, ...userInfo } = userExists;
+    await user.updateUser(userExists.uuid, { accessToken, refreshToken });
+
+    const { password: _, refreshToken: __, ...userInfo } = userExists;
+
+    res.cookie("refreshToken", refreshToken, {
+        secure: true,
+        httpOnly: true,
+        expires: dayjs().add(30, "days").toDate()
+    });
 
     return res.json({
-        message: "Авторизация прошла успешно",
-        token: token,
-        userInfo
+        message: "Авторизация успешна",
+        user: userInfo
     });
 }
-

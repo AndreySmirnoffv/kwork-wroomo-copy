@@ -18,11 +18,13 @@ model User{
   uuid String @id @default(uuid())
   email String @unique
   password String @unique
-  token String? @unique
   is_email_verified Boolean
   role String? @default("user")
   type String @default("client")
   avatarUrl String?
+  phone String? @default("")
+  accessToken String?
+  refreshToken String?
 }
 
 model Payment{

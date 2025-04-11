@@ -1,35 +1,57 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 import { User } from '#src/models/user.model.js';
+import { generateAccessToken } from '#src/utils/jwt.js';
+import { StatusCodes } from 'http-status-codes';
 
-dotenv.config()
+dotenv.config();
 
-const user = new User()
+const user = new User();
 
 export async function authMiddleware(req: Request, res: Response, next: NextFunction): Promise<any> {
     const authHeader = req.headers.authorization;
+    const refreshToken = req.headers['x-refresh-token'] as string | undefined;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: "Ошибка авторизации: Токен не был передан либо недействителен" });
+        return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Access токен не был передан" });
     }
-    const token = authHeader.split(" ")[1].replace(/^"|"$/g, "");
 
-    if (!token || typeof token !== "string") {
-        return res.status(403).json({ message: "Неверный формат" });
-    }
+    const accessToken = authHeader.split(" ")[1];
 
     try {
-        jwt.verify(token, process.env.JWT_SECRET as string);
-        const tokenUser = await user.findUserByToken(token)
-        res.json(tokenUser)
-        next()
+        const decoded = jwt.verify(accessToken, process.env.JWT_SECRET as string);
+        (req as any).user = decoded;
+        return next();
     } catch (error: any) {
         if (error.name === "TokenExpiredError") {
-            res.redirect(String(process.env.FRONTEND_API + "/auth"))
-            return res.status(403).json({ message: "Токен истек" });
+            if (!refreshToken) {
+                return res.status(StatusCodes.FORBIDDEN).json({ message: "Access токен истёк. Refresh токен отсутствует." });
+            }
+
+            try {
+                const decodedRefresh = jwt.verify(refreshToken, process.env.REFRESH_SECRET as string) as any;
+
+                const existingUser = await user.findUser(decodedRefresh.email);
+                if (!existingUser || existingUser.token !== refreshToken) {
+                    return res.status(StatusCodes.FORBIDDEN).json({ message: "Refresh токен недействителен" });
+                }
+
+                const newAccessToken = generateAccessToken({
+                    email: existingUser.email,
+                    userId: existingUser.uuid
+                });
+
+                res.setHeader("x-access-token", newAccessToken);
+
+                (req as any).user = jwt.decode(newAccessToken);
+                return next();
+
+            } catch (refreshError) {
+                return res.status(StatusCodes.FORBIDDEN).json({ message: "Неверный или просроченный refresh токен" });
+            }
         }
-        console.log(error)
-        return res.status(403).json({ message: "Неправельный токен" });
+
+        return res.status(StatusCodes.FORBIDDEN).json({ message: "Невалидный access токен" });
     }
 }
