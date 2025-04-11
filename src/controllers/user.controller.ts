@@ -1,5 +1,5 @@
 import { User } from "#src/models/user.model.js";
-import { Request, RequestParamHandler, Response } from "express";
+import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 const userModel = new User()

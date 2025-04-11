@@ -14,7 +14,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     const refreshToken = req.headers['x-refresh-token'] as string | undefined;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Access токен не был передан" });
+        return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Access token was not provided" });
     }
 
     const accessToken = authHeader.split(" ")[1];
@@ -26,7 +26,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     } catch (error: any) {
         if (error.name === "TokenExpiredError") {
             if (!refreshToken) {
-                return res.status(StatusCodes.FORBIDDEN).json({ message: "Access токен истёк. Refresh токен отсутствует." });
+                return res.status(StatusCodes.FORBIDDEN).json({ message: "Access token expired. Refresh token is missing." });
             }
 
             try {
@@ -34,7 +34,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
 
                 const existingUser = await user.findUser(decodedRefresh.email);
                 if (!existingUser || existingUser.accessToken !== refreshToken) {
-                    return res.status(StatusCodes.FORBIDDEN).json({ message: "Refresh токен недействителен" });
+                    return res.status(StatusCodes.FORBIDDEN).json({ message: "Refresh token is invalid" });
                 }
 
                 const newAccessToken = generateAccessToken({
@@ -48,10 +48,10 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
                 return next();
 
             } catch (refreshError) {
-                return res.status(StatusCodes.FORBIDDEN).json({ message: "Неверный или просроченный refresh токен" });
+                return res.status(StatusCodes.FORBIDDEN).json({ message: "Invalid or expired refresh token" });
             }
         }
 
-        return res.status(StatusCodes.FORBIDDEN).json({ message: "Невалидный access токен" });
+        return res.status(StatusCodes.FORBIDDEN).json({ message: "Invalid access token" });
     }
 }

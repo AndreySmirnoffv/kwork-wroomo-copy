@@ -11,40 +11,40 @@ export async function sendEmail(to: string, token: string) {
     return transport.sendMail({
         from: process.env.EMAIL_USER,
         to,
-        subject: "Подтверждение почты",
-        //TODO: На проде вместо localhost:8000 подставить домен
-        html: `<a href="http://localhost:8000/api/verification/verify-email?token=${token}">Подтвердить почту</a>`
+        subject: "Email Confirmation",
+        //TODO: In production, replace localhost:8000 with the domain
+        html: `<a href="http://localhost:8000/api/verification/verify-email?token=${token}">Confirm your email</a>`
     });
 }
 
 export async function verifyEmail(req: Request, res: Response): Promise<Response | any> {
-    const token = req.query.token as string
+    const accessToken = req.query.token as string
 
-    if (!token) {
-        return res.status(400).json({ message: "Токен не найден" });
+    if (!accessToken) {
+        return res.status(400).json({ message: "Token not found" });
     }
 
     try {
-        const decoded = jwt.verify(token as string, process.env.JWT_SECRET as string);
+        const decoded = jwt.verify(accessToken as string, process.env.JWT_SECRET as string);
         const { email } = decoded as { email: string };
 
         const userExists = await user.findUser(email);
 
         if (!userExists) {
-            return res.status(StatusCodes.NOT_FOUND).json({ message: "Пользователь не найден" });
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
         }
 
         const data: TypeEmailStatus = {
             email,
-            token,
+            accessToken,
             is_email_verified: true,
         }
         
         await user.emailStatus(data);
 
-        return res.json({ message: "Email подтвержден!" });
+        return res.json({ message: "Email confirmed!" });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Ошибка при подтверждении почты" });
+        return res.status(500).json({ message: "Error while confirming email" });
     }
 }

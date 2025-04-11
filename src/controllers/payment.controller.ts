@@ -1,6 +1,7 @@
 import { PaymentModel } from '#src/models/payment.model.js'
 import { stripe } from '#src/services/payment.service.js'
 import { Request, Response } from 'express'
+import { StatusCodes } from 'http-status-codes'
 
 const paymentModel = new PaymentModel()
 
@@ -22,7 +23,7 @@ export async function createPayment(req: Request, res: Response): Promise<Respon
         console.log(payment)
     } catch (error) {
         console.error(error)
-        return res.status(500).json({message: "Ошибка сервера"})
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Internal Server Error" })
     }
    
 }

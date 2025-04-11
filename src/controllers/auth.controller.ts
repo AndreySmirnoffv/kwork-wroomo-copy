@@ -14,7 +14,7 @@ export async function register(req: Request, res: Response) {
 
     const userExists = await user.findUser(email);
     
-    if (userExists) return res.status(StatusCodes.CONFLICT).json({ message: "Пользователь существует" });
+    if (userExists) return res.status(StatusCodes.CONFLICT).json({ message: "User already exists" });
 
     const hashedPassword = await hashPassword(password);
     const tokenPayload = { email };
@@ -42,7 +42,7 @@ export async function register(req: Request, res: Response) {
     });
 
     return res.status(StatusCodes.CREATED).json({
-        message: "Пользователь создан",
+        message: "User created",
         user: userInfo,
     });
 }
@@ -54,15 +54,15 @@ export async function login(req: Request, res: Response) {
     const userExists = await user.findUser(email);
 
     if (!userExists) {
-        return res.status(StatusCodes.NOT_FOUND).json({ message: "Пользователь не найден" });
+        return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" });
     }
 
     if (!userExists.is_email_verified) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Подтвердите почту" });
+        return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Please verify your email" });
     }
 
     const isPasswordValid = await comparePasswords(password, userExists.password);
-    if (!isPasswordValid) return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Неверный пароль" });
+    if (!isPasswordValid) return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Invalid password" });
 
     const tokenPayload = { email: userExists.email, userId: userExists.uuid };
     const accessToken = generateAccessToken(tokenPayload);
@@ -79,7 +79,7 @@ export async function login(req: Request, res: Response) {
     });
 
     return res.json({
-        message: "Авторизация успешна",
+        message: "Login successful",
         user: userInfo
     });
 }

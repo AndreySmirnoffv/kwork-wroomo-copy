@@ -27,7 +27,6 @@ export async function uploadAvatar(uuid: string, avatar: string): Promise<string
 
         return avatarUrl;
     } catch (error) {
-        console.error("Error uploading avatar to S3:", error);
-        throw new Error("Error uploading avatar to S3");
+        throw new Error(`Error uploading avatar to S3 ${error}`);
     }
 }
