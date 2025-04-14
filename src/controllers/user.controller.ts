@@ -1,4 +1,6 @@
 import { User } from "#src/models/user.model.js";
+import { uploadImage } from "#src/utils/s3.js";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -84,4 +86,19 @@ export async function deleteUser(req: Request, res: Response): Promise<Response 
     await userModel.deleteUser(uuid);
 
     return res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
+}
+
+export async function uploadAvatar(req: Request, res: Response): Promise<Response | any>{
+    const { uuid, avatar } = req.body
+
+    if (!avatar || !avatar.startsWith("data:image")){
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: "incorrect image data" })
+    }
+    
+    const avatarUrl = await uploadImage(uuid, avatar)
+
+    await userModel.updateUser(uuid, { avatarUrl })
+
+    return res.json({ message: "users avatra updated succesfully", avatarUrl })
+
 }
