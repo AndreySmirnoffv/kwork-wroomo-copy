@@ -18,11 +18,19 @@ model User{
   uuid String @id @default(uuid())
   email String @unique
   password String @unique
+  name String @default("default_name")
+  surname String @default("default_surname")
+  additionalEmail String? @default("")
+  additionalName String? @default("")
+  additionalStatus String? @default("")
+  additionalPhoneNumber String? @default("")
   is_email_verified Boolean
   role String? @default("user")
   type String @default("client")
   avatarUrl String?
   phone String? @default("")
+  whatsApp String? @default("")
+  telegram String? @default("")
   accessToken String?
   refreshToken String?
 }
