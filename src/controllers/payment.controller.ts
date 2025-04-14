@@ -42,9 +42,10 @@ export async function updateStripeCheckoutSession(req: Request, res: Response): 
 }
 
 export async function updatePaymentStatus(req: Request, res: Response): Promise<Response | any> {
-
     const { email, amount, paymentId, status } = req.body
+
     const user = await new User().findUser(email)
+    
     const newBalance = user?.balance + amount
 
     const payment = await paymentModel.updatePaymentStatus(paymentId, status, newBalance, email)
