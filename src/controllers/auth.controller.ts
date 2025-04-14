@@ -10,7 +10,7 @@ import { StatusCodes } from 'http-status-codes'
 const user = new User()
 
 export async function register(req: Request, res: Response): Promise<Response | any> {
-    const { email, password } = req.body;
+    const { name, surname, email, password } = req.body;
 
     const userExists = await user.findUser(email);
     
@@ -25,6 +25,8 @@ export async function register(req: Request, res: Response): Promise<Response | 
     const data: TypeUser = {
         email,
         password: hashedPassword,
+        name,
+        surname,
         emailVerified: false,
         accessToken,
         refreshToken
