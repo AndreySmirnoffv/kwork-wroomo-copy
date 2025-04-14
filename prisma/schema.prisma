@@ -52,6 +52,8 @@ model Bike{
   ps Float
   pricePerDay Float
   color String
+    rentStart DateTime
+  rentEnd DateTime
 }
 
 model Car{
@@ -65,4 +67,6 @@ model Car{
   amountSpace Int
   transmission String
   gearDrive String
+  rentStart DateTime
+  rentEnd DateTime
 }
