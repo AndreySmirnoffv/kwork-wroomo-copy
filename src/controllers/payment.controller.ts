@@ -1,4 +1,5 @@
 import { PaymentModel } from '#src/models/payment.model.js'
+import { User } from '#src/models/user.model.js'
 import { stripe } from '#src/services/payment.service.js'
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
@@ -42,9 +43,11 @@ export async function updateStripeCheckoutSession(req: Request, res: Response): 
 
 export async function updatePaymentStatus(req: Request, res: Response): Promise<Response | any> {
 
-    const { paymentId, status } = req.body
+    const { email, amount, paymentId, status } = req.body
+    const user = await new User().findUser(email)
+    const newBalance = user?.balance + amount
 
-    const payment = await paymentModel.updatePaymentStatus(paymentId, status)
+    const payment = await paymentModel.updatePaymentStatus(paymentId, status, newBalance, email)
 
     return res.json(payment)
 }

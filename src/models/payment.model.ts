@@ -15,12 +15,19 @@ export class PaymentModel{
         })
     }
 
-    async updatePaymentStatus(paymentId: string, status: string){
-        return prisma.payment.update({
-            where: { paymentId },
-            data: {
-                status
-            }
-        })
+    async updatePaymentStatus(paymentId: string, status: string, balance: number, email: string){
+        return await prisma.$transaction([
+            prisma.payment.update({
+                where: { paymentId },
+                data: {
+                    status
+                }
+            }),
+            prisma.user.update({
+                where: { email },
+                data: { balance }
+            })
+        ])
+       
     }
 }
