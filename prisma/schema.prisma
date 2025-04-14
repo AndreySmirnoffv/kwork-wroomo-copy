@@ -43,7 +43,7 @@ model Payment{
   status String
 }
 
-model Bike{
+model Product{
   id BigInt @id @default(autoincrement())
   brand String
   model String
@@ -52,21 +52,6 @@ model Bike{
   ps Float
   pricePerDay Float
   color String
-    rentStart DateTime
-  rentEnd DateTime
-}
-
-model Car{
-  id BigInt @id @default(autoincrement())
-  brand String
-  model String
-  type String
-  year Int
-  ps Float
-  pricePerDay Float
-  amountSpace Int
-  transmission String
-  gearDrive String
   rentStart DateTime
   rentEnd DateTime
 }
