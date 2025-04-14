@@ -3,7 +3,7 @@ import { s3, BUCKET_NAME } from "#src/services/s3.bucket.service.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 
-export async function uploadAvatar(uuid: string, avatar: string): Promise<string> {
+export async function uploadImage(uuid: string, avatar: string): Promise<string> {
     const base64Data = avatar.split(",")[1]; 
 
     if (!base64Data) {
