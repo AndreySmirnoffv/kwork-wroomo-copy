@@ -9,6 +9,7 @@ export type TypeProduct = {
     ps: number
     pricePerDay: number
     color: string
+    isApproved: boolean
     photoUrls: string[]
     rentStart: Date
     rentEnd: Date
