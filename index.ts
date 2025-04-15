@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import appRoutes from './app.js'
 import cors from 'cors'
+import { initRabbitMQ } from '#src/services/rabbitmq.service.js'
 
 dotenv.config()
 
@@ -15,6 +16,8 @@ app.use(cors({
 app.use(express.json())
 
 app.use("/api", appRoutes);
+
+initRabbitMQ()
 
 console.log(`${process.env.prodStatus ? process.env.DEV_IP : process.env.PROD_IP}`)
 
