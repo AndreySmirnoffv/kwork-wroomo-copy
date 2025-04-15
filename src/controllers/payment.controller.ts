@@ -1,6 +1,7 @@
 import { PaymentModel } from '#src/models/payment.model.js'
 import { User } from '#src/models/user.model.js'
 import { stripe } from '#src/services/payment.service.js'
+import { sendToQueue } from '#src/utils/rabbitmq.js'
 import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -50,5 +51,10 @@ export async function updatePaymentStatus(req: Request, res: Response): Promise<
 
     const payment = await paymentModel.updatePaymentStatus(paymentId, status, newBalance, email)
 
-    return res.json(payment)
+    await sendToQueue("order_notifications", {
+        type: "NEW_ORDER",
+        data: "New order"
+    })
+
+    return res.json({ message: "Message was sent successfully", payment })
 }
