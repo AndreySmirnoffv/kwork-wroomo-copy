@@ -1,10 +1,24 @@
-import { client } from "#src/services/elastic.search.service.js"
-import { TypeProduct } from "#src/types/Product.js"
+import { client } from "#src/services/elastic.search.service.js";
+import { TypeProduct } from "#src/types/Product.js";
 
-export async function insertToElasticSearch(product: TypeProduct){
+export async function insertToElasticSearch(product: TypeProduct) {
     try {
-        const { id, brand, title, model, type, description, year, ps, pricePerDay, color, photoUrls, rentStart, rentEnd } = product
-        
+        const {
+            id,
+            brand,
+            title,
+            isApproved,
+            type,
+            description,
+            year,
+            ps,
+            pricePerDay,
+            color,
+            photoUrls,
+            rentStart,
+            rentEnd
+        } = product;
+
         await client.index({
             index: "products",
             id: id.toString(),
@@ -14,6 +28,7 @@ export async function insertToElasticSearch(product: TypeProduct){
                 pricePerDay,
                 type,
                 description,
+                isApproved,
                 year,
                 ps,
                 color,
@@ -21,34 +36,56 @@ export async function insertToElasticSearch(product: TypeProduct){
                 rentStart,
                 rentEnd
             }
-            
-        })
+        });
     } catch (error: any) {
-        throw new Error(error)
+        throw new Error(error);
     }
 }
 
 export async function searchProducts(query: any): Promise<any> {
-    const filters = [];
+    const filters: any[] = [
+        { term: { isApproved: true } }
+    ];
 
-    const multiFields = ['brand', 'model', 'subtype', 'fuel_system', 'transmission', 'drive_system', 'color', 'features', 'type'];
-    
+    const multiFields = [
+        "brand",
+        "model",
+        "subtype",
+        "fuel_system",
+        "transmission",
+        "drive_system",
+        "color",
+        "features",
+        "type"
+    ];
+
     for (const field of multiFields) {
-        const values = query[field] ? (Array.isArray(query[field]) ? query[field] : [query[field]]) : [];
-        if (values.length > 0) {
+        const values = query[field]
+            ? Array.isArray(query[field])
+                ? query[field]
+                : [query[field]]
+            : [];
+
+        if (values.length === 1) {
+            filters.push({ term: { [field]: values[0] } });
+        } else if (values.length > 1) {
             filters.push({ terms: { [field]: values } });
         }
     }
 
-    const seats = query.seats ? query.seats.split(',').map(Number) : [];
-    if (seats.length > 0) {
-        filters.push({ terms: { seats } });
+    if (query.seats) {
+        const seats = query.seats.split(",").map(Number).filter(Boolean);
+        if (seats.length === 1) {
+            filters.push({ term: { seats: seats[0] } });
+        } else if (seats.length > 1) {
+            filters.push({ terms: { seats } });
+        }
     }
 
     const ranges = {
-        price: query.price ? query.price.split(',').map(Number) : [],
-        production_year: query.production_year ? query.production_year.split(',').map(Number) : [],
-        engine_power: query.engine_power ? query.engine_power.split(',').map(Number) : [],
+        price: query.price ? query.price.split(",").map(Number) : [],
+        production_year: query.production_year ? query.production_year.split(",").map(Number) : [],
+        engine_power: query.engine_power ? query.engine_power.split(",").map(Number) : []
     };
 
     for (const [field, arr] of Object.entries(ranges)) {
@@ -69,9 +106,9 @@ export async function searchProducts(query: any): Promise<any> {
             range: {
                 availability: {
                     ...(query.datetime_after && { gte: query.datetime_after }),
-                    ...(query.datetime_before && { lte: query.datetime_before }),
-                },
-            },
+                    ...(query.datetime_before && { lte: query.datetime_before })
+                }
+            }
         });
     }
 
@@ -97,5 +134,5 @@ export async function searchProducts(query: any): Promise<any> {
         body
     });
 
-    return result.hits.hits.map(hit => hit._source);
+    return result.hits.hits.map((hit: any) => hit._source);
 }
