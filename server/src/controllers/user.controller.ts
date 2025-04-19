@@ -1,6 +1,5 @@
 import { User } from "#src/models/user.model.js";
 import { uploadImage } from "#src/utils/s3.js";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
