@@ -1,0 +1,33 @@
+.btn {
+	padding: 10px 12px;
+	display: inline-flex;
+	align-items: center;
+	border: 1px solid transparent;
+	border-radius: 8px;
+
+	font-weight: 500;
+	font-size: 14px;
+	white-space: nowrap;
+}
+
+.primary {
+	background-color: var(--button-bg);
+
+	color: var(--button-text-color);
+
+	&:hover {
+		background-color: var(--button-hover-color);
+	}
+}
+
+.secondary {
+	background-color: transparent;
+	border-color: var(--button-secondary-border-color);
+
+	color: var(--button-secondary-text-color);
+
+	&:hover {
+		border-color: var(--button-hover-color);
+		color: var(--button-hover-color);
+	}
+}
