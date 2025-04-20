@@ -4,7 +4,7 @@ import { Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 const userModel = new User()
-const admiModel = new AdminModel()
+const adminModel = new AdminModel()
 
 export async function getAdmin(req: Request, res: Response): Promise<Response | any>{
     const { uuid } = req.params
@@ -23,7 +23,7 @@ export async function changeUserRole(req: Request, res: Response): Promise<Respo
         return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found" })
     }
 
-    await admiModel.changeUserRole(user.email, role)
+    await adminModel.changeUserRole(user.email, role)
 
     return res.json({ message: `Role ${role} was succesfully set for the user` })
 }
