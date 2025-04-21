@@ -24,6 +24,6 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapi))
 
 // initRabbitMQ()
 
-console.log(`${process.env.prodStatus ? process.env.DEV_IP : process.env.PROD_IP}`)
+console.log(`${process.env.prodStatus ? process.env.DEV_IP : process.env.DEPLOY_IP}`)
 
 app.listen(process.env.PORT, () => console.log(`server adress is ${process.env.prodStatus ? process.env.DEV_IP : process.env.PROD_IP}:${process.env.PORT}`))

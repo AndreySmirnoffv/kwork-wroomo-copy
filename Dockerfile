@@ -1,15 +1,11 @@
 FROM node:alpine
 
-RUN npm install -g pm2
-
+RUN apk add --no-cache nginx
 WORKDIR /app
 
-COPY package*.json ./
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY client/dist/* /var/www/html
 
-RUN npm ci --only=production
+EXPOSE 80 443
 
-COPY . .
-
-RUN npm run build
-
-CMD ["pm2-runtime", "start", "npm", "--name", "frontend", "--", "start"]
+CMD ["nginx", "-g", "daemon off;"]
