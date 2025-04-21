@@ -2,9 +2,9 @@ import express from 'express'
 import dotenv from 'dotenv'
 import appRoutes from './app.js'
 import cors from 'cors'
-import { initRabbitMQ } from '#src/services/rabbitmq.service.js'
 import * as swaggerUi from 'swagger-ui-express'
 import openapi from './openapi.json' with { type: "json" }
+import { initRabbitMQ } from '#src/services/rabbitmq.service.js'
 
 dotenv.config()
 

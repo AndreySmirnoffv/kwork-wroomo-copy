@@ -8,3 +8,5 @@ router.use("/auth", authRoutes);
 router.use("/verification", verificationRoutes);
 router.use("/payments", paymentRoutes);
 router.use("/users", userRoutes);
+
+export default router
