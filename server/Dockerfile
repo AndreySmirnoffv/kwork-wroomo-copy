@@ -1,15 +1,12 @@
 FROM node:alpine
 
 RUN npm install -g pm2
-
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm ci --only=production
 
 COPY . .
+EXPOSE 8000
 
-RUN npm run build
-
-CMD ["pm2-runtime", "start", "npm", "--name", "frontend", "--", "start"]
+CMD ["pm2-runtime", "dist/index.js", "--name", "backend"]

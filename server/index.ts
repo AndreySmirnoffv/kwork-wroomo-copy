@@ -2,9 +2,9 @@ import express from 'express'
 import dotenv from 'dotenv'
 import appRoutes from './app.js'
 import cors from 'cors'
-import { initRabbitMQ } from '#src/services/rabbitmq.service.js'
 import * as swaggerUi from 'swagger-ui-express'
 import openapi from './openapi.json' with { type: "json" }
+import { initRabbitMQ } from '#src/services/rabbitmq.service.js'
 
 dotenv.config()
 
@@ -24,6 +24,6 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapi))
 
 // initRabbitMQ()
 
-console.log(`${process.env.prodStatus ? process.env.DEV_IP : process.env.PROD_IP}`)
+console.log(`${process.env.prodStatus ? process.env.DEV_IP : process.env.DEPLOY_IP}`)
 
 app.listen(process.env.PORT, () => console.log(`server adress is ${process.env.prodStatus ? process.env.DEV_IP : process.env.PROD_IP}:${process.env.PORT}`))

@@ -4,8 +4,8 @@ import { comparePasswords, hashPassword } from '#src/utils/bcrypt.js'
 import { Request, Response } from 'express'
 import { sendEmail } from './verification.controller.js'
 import { generateAccessToken, generateRefreshToken } from '#src/utils/jwt.js';
-import dayjs from 'dayjs'
 import { StatusCodes } from 'http-status-codes'
+import dayjs from 'dayjs'
 
 const user = new User()
 
@@ -97,3 +97,4 @@ export async function login(req: Request, res: Response): Promise<Response | any
         user: userInfo
     });
 }
+
