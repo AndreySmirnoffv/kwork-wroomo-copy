@@ -1,1 +1,0 @@
-export type pathDataKeyType = 'login' | 'signup'
