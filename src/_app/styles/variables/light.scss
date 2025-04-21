@@ -1,0 +1,72 @@
+html[data-theme='light'] {
+	/*? Цвета фона ?*/
+	--background-color: #ffffff;
+	/* Основной фон страницы */
+	--block-background-color: #070709;
+	/* Фон блоков */
+
+	/*? Цвета текста ?*/
+	--text-color: #262d35;
+	--text-color-in: #070709;
+	/* Основной цвет текста */
+	--secondary-text-color: #9795a1;
+	/* Вторичный цвет текста */
+
+	/*? Цвета кнопок ?*/
+	--button-primary-background-color: #caff95;
+	--button-primary-background-color-hover: #adff5b;
+	--button-primary-text-color: #202927;
+	--button-primary-text-color-hover: #202920;
+
+	--button-special-background-color: linear-gradient(165deg, rgba(202, 255, 149, 1) 0%, rgba(168, 115, 255, 1) 100%);
+	--button-special-background-color-hover: linear-gradient(165deg, rgb(195, 245, 146) 0%, rgb(186, 143, 255) 100%);
+	--button-special-text-color: #202927;
+	--button-special-text-color-hover: #202920;
+
+	--button-secondary-background-color: #eeeeee;
+	--button-secondary-background-color-hover: #fadddd;
+	--button-secondary-text-color: #202927;
+	--button-secondary-text-color-hover: #202920;
+	/* Фон кнопок */
+	--button-text-color: #ffffff;
+	/* Цвет текста на кнопках */
+
+	/*? Цвета обводки ?*/
+	--border-color: #3333332a;
+	/* Цвет обводки элементов */
+
+	/*? Эффект наведения на кнопки ?*/
+	--button-hover-background-color: #3b49df66;
+	/* Фон кнопок при наведении */
+	--button-hover-text-color: #ffffff;
+
+	--button-secondary-color: #ffffff31;
+	/* Цвет текста на кнопках при наведении */
+
+	/*? Дополнительные цвета ?*/
+	--link-color: #4800ff;
+	/* Цвет ссылок */
+	--link-hover-color: #e91e63;
+	/* Цвет ссылок при наведении */
+
+	--blue-color: #1f2966;
+	--blue-color-opacity: rgba(59, 73, 223, 0.4);
+
+	/* Цвет инпута */
+	--input-background-color: #f0f0f0;
+	--input-border-color: #7a8b9a4a;
+	--input-show-mark-color: #2930364a;
+	--input-show-mark-color-active: #101214a6;
+
+	--input-border-color-focus: #87a0b64a;
+
+	//? Notification color
+	--notification-error-color: #e91e62;
+	--notification-success-color: #4caf4fd2;
+	--notification-warning-color: #ff9900;
+	--notification-info-color: #2195f3b5;
+
+	//
+
+	--auth-another-svg-color: black;
+}

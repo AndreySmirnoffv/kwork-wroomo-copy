@@ -1,0 +1,20 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+
+	.link {
+		margin: 20px 0;
+
+		text-align: center;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
+.flex {
+	display: flex;
+	gap: 10px;
+}

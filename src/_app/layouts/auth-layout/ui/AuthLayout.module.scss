@@ -1,0 +1,47 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	justify-content: space-between;
+}
+
+.top {
+	margin-bottom: 66px;
+
+	text-align: center;
+
+	.title {
+		margin-bottom: 40px;
+	}
+
+	a {
+		text-decoration: underline;
+		color: var(--link-color);
+	}
+}
+
+.logo {
+	width: 145px;
+	height: 20px;
+	display: inline-flex;
+
+	svg {
+		height: 100%;
+		width: 100%;
+	}
+}
+
+.header,
+.footer {
+	padding: 32px;
+}
+
+.footer {
+	color: var(--text-color-secondary);
+}
+
+.content {
+	margin: 0 auto;
+	max-width: 400px;
+	width: 100%;
+}

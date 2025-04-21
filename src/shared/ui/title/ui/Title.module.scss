@@ -1,0 +1,77 @@
+// Переменные вынесены в отдельный блок для лучшей организации
+$font-sizes: (
+	h1: 32px,
+	h2: 24px,
+	h3: 18px,
+	h4: 16px,
+	h5: 14px,
+	h6: 12px
+);
+
+$font-weights: (
+	bold: 700,
+	medium: 500,
+	regular: 400
+);
+
+%alignment-base {
+	display: flex;
+}
+
+.select {
+	user-select: text
+}
+
+.left {
+	@extend %alignment-base;
+	justify-content: flex-start;
+	text-align: left;
+}
+
+.center {
+	@extend %alignment-base;
+	justify-content: center;
+	text-align: center;
+}
+
+.right {
+	@extend %alignment-base;
+	justify-content: flex-end;
+	text-align: right;
+}
+
+@mixin text-alignment($direction) {
+	text-align: $direction;
+}
+
+.text-center {
+	@include text-alignment(center);
+}
+
+.text-left {
+	@include text-alignment(left);
+}
+
+.text-right {
+	@include text-alignment(right);
+}
+
+@each $heading, $size in $font-sizes {
+	.#{$heading} {
+		font-size: $size;
+	}
+}
+
+@each $weight-name, $weight-value in $font-weights {
+	.#{$weight-name} {
+		font-weight: $weight-value;
+	}
+}
+
+.secondary {
+	color: var(--text-color-secondary);
+}
+
+.primary {
+	color: var(--text-color);
+}
