@@ -1,11 +1,15 @@
-FROM node:alpine
+FROM node:18-alpine
 
-RUN apk add --no-cache nginx
 WORKDIR /app
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY client/dist/* /var/www/html
+COPY package*.json ./
 
-EXPOSE 80 443
+RUN npm install
 
-CMD ["nginx", "-g", "daemon off;"]
+COPY . .
+
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npx", "next", "start"]
