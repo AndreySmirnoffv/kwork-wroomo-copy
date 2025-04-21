@@ -1,0 +1,1 @@
+{"version":3,"file":"manager.model.js","sourceRoot":"","sources":["../../../src/models/manager.model.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,iCAAiC,CAAA;AAExD,MAAM,OAAO,YAAY;IACrB,KAAK,CAAC,aAAa,CAAC,EAAU,EAAE,UAAmB;QAC/C,OAAO,MAAM,MAAM,CAAC,OAAO,CAAC,MAAM,CAAC;YAC/B,KAAK,EAAE,EAAE,EAAE,EAAE;YACb,IAAI,EAAE,EAAE,UAAU,EAAE;SACvB,CAAC,CAAA;IACN,CAAC;CACJ"}
