@@ -1,1 +1,0 @@
-{"version":3,"file":"admin.model.js","sourceRoot":"","sources":["../../../src/models/admin.model.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,iCAAiC,CAAC;AAEzD,MAAM,OAAO,UAAU;IAEnB,KAAK,CAAC,cAAc,CAAC,KAAa,EAAE,IAAY;QAC5C,OAAO,MAAM,MAAM,CAAC,IAAI,CAAC,MAAM,CAAC;YAC5B,KAAK,EAAE,EAAE,KAAK,EAAE;YAChB,IAAI,EAAE,EAAE,IAAI,EAAE;SACjB,CAAC,CAAA;IACN,CAAC;CACJ"}
